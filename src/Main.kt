@@ -1,16 +1,20 @@
-//TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
-// 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
-class Person (
-    val name: String, // 읽기 전용
-    var age: Int
-) {
-    val isMarried: Boolean
-        get() {
-            return age > 40
-        }
 
+class Temp {
+    var feild1: Int = 0  // 3가지 튀어나온다, (private) 필드, public getter와 setter가 튀어나온다.
+
+    public var fieldAlt: Int
+        get() {
+            return
+        }
+        set(value) {
+            feild1 = value * 2
+        }
 }
 
 fun main() {
-    var p = Person("Name", 13)
+    // 설계가 쉬움, 사이드 이팩트가 생각보다 관리가 안된다.
+    var temp = Temp()
+    println(temp.fieldAlt)
+    temp.fieldAlt = 100
+    println("${temp.fieldAlt} ${temp.feild1}")
 }
