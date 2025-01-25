@@ -49,14 +49,6 @@ class AirPlane: Fastable
 
 fun eval(e: Fastable) {
 
-//    if (e is Car) {
-//        println("e is Car")
-//    }
-//
-//    if (e is AirPlane) {
-//        println("e is Airplane")
-//    }
-
     when(e) {
         is Car -> println("e is Car")
         is AirPlane ->  println("e is Airplane")

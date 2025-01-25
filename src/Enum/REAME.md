@@ -13,18 +13,3 @@ enum class Color {
     RED, ORANGE, YELLOW
 }
 ```
-
-# when
-
-```kotlin
-
-when(조건이 될 재료) {
-    조건 -> 행동
-}
-
-when {
-    (조건이 될 재료 = 조건) -> 행동
-}
-
-
-```
