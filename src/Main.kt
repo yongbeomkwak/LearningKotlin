@@ -1,9 +1,15 @@
-import Enum.*
-
 fun main() {
-    var benz = Car()
-    var koreaAir = AirPlane()
+    val a: Int = 5
 
-    eval(benz)
-    eval(koreaAir)
+    if (a in 0..9) {
+        println("${a}는 0부터 9까지 범위 안에 있습니다.")
+    } else {
+        println("${a}는 0부터 9까지 범위 안에 없습니다.")
+    }
+
+    when(a) {
+        in 0..9 -> println("${a}는 0부터 9까지 범위 안에 있습니다.")
+        else ->  println("${a}는 0부터 9까지 범위 안에 없습니다.")
+    }
+
 }

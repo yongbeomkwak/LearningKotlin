@@ -44,3 +44,28 @@ class 클래스명 () {
 ```
 getter만 있을 경우 반드시 `val`로 선언 
 setter가 필요하다면 반드시 `var`로 선언
+
+## Compnion Object
+
+클래스 레벨의 메소드 또는 프로퍼티를 갖게 해주는 객체이다.
+
+### 선언
+
+```kotlin
+class AClass {
+    companion object { 
+        
+    }
+    
+    companion object 이름 {
+        
+    }
+}
+```
+
+### 사용
+
+```kotlin
+클래스명.CO명.프로퍼티 명 또는 클래스명.프로퍼티 명
+```
+
