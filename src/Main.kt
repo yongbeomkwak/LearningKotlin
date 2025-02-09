@@ -11,7 +11,10 @@ fun <T> joinToString(collection: Collection<T>, separator: String, prefix: Strin
     return result.toString();
 }
 
-fun main() {
+infix fun Int.to(other: Any) = Pair(this, other)
 
+fun main() {
+    val (number, element) = 1 to "Name"
+    println("${number} ${element}")
 }
 
