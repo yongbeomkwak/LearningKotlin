@@ -11,7 +11,17 @@ fun <T> joinToString(collection: Collection<T>, separator: String, prefix: Strin
     return result.toString();
 }
 
-fun main() {
+class AI {
 
+}
+
+val AI.condition
+    get() = "기분이 좋다."
+
+
+
+fun main() {
+    val ai = AI()
+    println(ai.condition)
 }
 
