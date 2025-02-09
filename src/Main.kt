@@ -13,7 +13,14 @@ fun <T> joinToString(collection: Collection<T>, separator: String, prefix: Strin
 
 infix fun Int.to(other: Any) = Pair(this, other)
 
+fun print(vararg values: Int) {
+    values.forEach {
+        println(it)
+    }
+}
+
 fun main() {
+    print(1,2,3,4,5)
     val (number, element) = 1 to "Name"
     println("${number} ${element}")
 }

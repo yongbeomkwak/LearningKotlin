@@ -11,13 +11,13 @@ fun 함수명 (파리미터명: 타입,...): 리턴 타입 {
 기본 값이 있는 파라미터는 최대한 뒤에 명시한다.
 ```kotlin
 fun 함수명 (파라미터명: 타입 = 값): 리턴 타입 {
-    
+
 }
 ```
 
 ## @JvmOverloads
 
-자바에서는 함수에 기본값을 넣을 수 없기때문에 
+자바에서는 함수에 기본값을 넣을 수 없기때문에
 
 코틀린에서 기본값을 가진 함수를 자바에서 호출할 때,
 여러 개의 오버로드된 메서드를 자동으로 생성해 주는 어노테이션입니다.
@@ -109,16 +109,16 @@ public final class AUtils {
 }
 ```
 
-## 확장 
+## 확장
 
-### 확장 함수 
+### 확장 함수
 ```kotlin
 fun 확장하려는 타입.확장함수 이름(파라미터): 리턴타입 {
     함수 내용 
 }
 ```
 
-### 확장 프로퍼티 
+### 확장 프로퍼티
 ```kotlin
 val 확장하려는 타입.변수명: 변수타입 
     get() = 값 
@@ -129,32 +129,24 @@ var 확장하려는 타입.변수명: 변수타입
         // Setter 내용
     }
 ```
-
 ### 특징
 - 오버라이딩이 불가능하다.
 
-## 가변길이 변수 vararg
-
+## 가변길이 파라미터 vararg
 ```kotlin
-fun print (vararg args: Int) {
-    //args = IntArray
-    args.forEach {
+fun print(vararg values: Int) {
+    values.forEach {
         println(it)
     }
 }
 
-fun main() {
-    print(1, 2, 3, 4, 5)
-}
+print(1,2,3,4,5)
 ```
 
-## 중위 호출 함수 infix
+## 중위 함수 infix
 ```kotlin
 infix fun Int.to(other: Any) = Pair(this, other)
 
-fun main() {
-    val (number, element) = 1 to "Name"
-    println("${number} ${element}")
-}
+val (number, element) = 1 to "Name"
+println("${number} ${element}")
 ```
-
