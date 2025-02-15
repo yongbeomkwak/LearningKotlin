@@ -1,27 +1,41 @@
-import java.net.URL
-import kotlin.random.Random
-fun <T> joinToString(collection: Collection<T>, separator: String, prefix: String, postfix: String): String {
-    val result = StringBuilder(prefix)
-    for ((index, element) in collection.withIndex()) {
-        if (index > 0) result.append(separator)
-        result.append(element)
-    }
-
-    result.append(postfix)
-    return result.toString();
+abstract class Ac {
+    abstract fun AcFunction()
 }
 
-infix fun Int.to(other: Any) = Pair(this, other)
+class C1 {
 
-fun print(vararg values: Int) {
-    values.forEach {
-        println(it)
+}
+
+abstract class C2 {
+    abstract fun hello()
+}
+
+open class C3: C2() {
+    override fun hello() {
+        TODO("Not yet implemented")
+    }
+    open fun hello2(){}
+}
+
+
+//class Base: Ac() {
+//    override fun AcFunction() {
+//        TODO("Not yet implemented")
+//    }
+//}
+
+//class Base: C1() {
+//
+//}
+
+class  Base: C3(){
+    override fun hello() {
+        super.hello()
     }
 }
 
 fun main() {
-    print(1,2,3,4,5)
-    val (number, element) = 1 to "Name"
-    println("${number} ${element}")
+
+
 }
 

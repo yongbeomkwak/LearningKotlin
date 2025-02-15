@@ -22,7 +22,7 @@ class 클래스명 (
 
 코틀린의 기본 접근 제한자는 `public`
 
-<br>
+---
 
 ## 커스텀 접근자
 ```kotlin
@@ -44,6 +44,8 @@ class 클래스명 () {
 ```
 getter만 있을 경우 반드시 `val`로 선언 
 setter가 필요하다면 반드시 `var`로 선언
+
+---
 
 ## Compnion Object
 
@@ -69,3 +71,30 @@ class AClass {
 클래스명.CO명.프로퍼티 명 또는 클래스명.프로퍼티 명
 ```
 
+---
+
+### 상속 접근 제한자 final, open, abstract, override
+
+|    키워드    | override 가능 여부 |                   설명                    |
+|:---------:|:--------------:|:---------------------------------------:|
+|   final   |       X        |           default 제어자 (생략가능)            |
+|   open    |       O        |              구현부를 작성할 수 있음              |
+| abstract  |       O        |              구현부 작성 할 수 없음              |
+| override  |       O        | 기본적으로 open이지만 다음 상속을 맞고 싶으면 앞에 final 명시 | 
+
+```kotlin
+class A {} // 상속 불가능
+
+abstract class AA {
+    abstract fun a() // abstract 키워드는 abstract 클래스안에서만 가능  
+}
+
+open class  AAA: BBB() {
+    open fun aaa() {}
+    final override fun bbb() {} // AAA를 상속할 때 override 불가 
+    }
+}
+
+
+
+```
