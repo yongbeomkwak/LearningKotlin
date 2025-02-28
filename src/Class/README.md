@@ -94,7 +94,108 @@ open class  AAA: BBB() {
     final override fun bbb() {} // AAA를 상속할 때 override 불가 
     }
 }
+```
+
+---
+
+## 중첩클래스와 내부 클래스
+
+### 특징
 
 
+|    구분    |           중첩           |           내부            |
+|:--------:|:----------------------:|:-----------------------:|
+|   키워드    |           X            |          inner          |
+|  외부 참조   |          불가능           |     this@OuterClass     |
+|  독릭접 생성  | ✅ 가능 (외부 클래스 없이 생성 가능) | ❌ 불가능 (외부 클래스의 인스턴스 필요) |
 
+### 예제 코드
+```kotlin
+class OuterClass1 {
+    var outerProperty: Int = 3
+    class NestedClass {
+        fun printOuter() {
+            println("바깥쪽에 대한 참조가 없음")
+        }
+    }
+}
+
+class OuterClass2 {
+    var outerProperty: Int = 3
+    inner class InnerClass {
+        fun printOuter() {
+         println(this@OuterClass2.outerProperty)
+        }
+    }
+}
+
+
+fun main() {
+    // ✅ NestedClass 인스턴스 생성 (외부 클래스 필요 없음)
+    val nested = OuterClass1.NestedClass()
+    nested.printOuter() // 출력: "바깥쪽에 대한 참조가 없음"
+
+    // ✅ InnerClass 인스턴스 생성 (외부 클래스의 인스턴스 필요)
+    val outer = OuterClass2()
+    val inner = outer.InnerClass()
+    inner.printOuter() // 출력: "3"
+
+}
+```
+---
+
+## 봉인된 클래스
+
+### 키워드
+`sealed`
+
+### 역할
+클래스 계층 정의 시 계층 확장을 제한하는 키워드
+
+### 특징
+- sealed는 자동으로 opendl ehlsek.
+- 컴파일 시점에 디폴트 분기의 불편함을 해결해준다.
+- 상위 클래스에 `sealed`가 붙으면 상속한 하위 클래스 정의를 제한
+- 하위클래스는 반드시 `중첩 클래스` 형식으로 사용해야한다.
+
+### 예제 코드
+```kotlin
+interface Expr1
+class Num1: Expr1
+class Sum1: Expr1
+
+fun eval1(e: Expr1): Int {
+    return when(e) {
+        is Num1 ->  1
+        is Sum1 ->  2
+        else -> 0
+    }
+}
+
+sealed class Expr2 {
+    class Num2: Expr2()
+    class Sum2: Expr2()
+}
+
+fun eval2(e: Expr2): Int {
+    return when(e) {
+        is Expr2.Num2 ->  1
+        is Expr2.Sum2 ->  2
+    }
+}
+
+
+fun main() {
+    val n1 = Num1()
+    val s1 = Sum1()
+    println(eval1(n1))
+    println(eval1(s1))
+
+    val n2 = Expr2.Num2()
+    val s2 = Expr2.Sum2()
+    println("=========================")
+    println(eval2(n2))
+    println(eval2(s2))
+
+}
 ```
