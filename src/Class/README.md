@@ -199,3 +199,92 @@ fun main() {
 
 }
 ```
+
+## 생성자
+
+### 주 생성자
+- 클래스 이름뒤에 오는 괄호로 둘렀아니 코드
+- `init`블록이나 프로퍼티 초기화 식에서만 주 생성자 파라미터 참조 가능
+- 생성자 파라미터 default 값 지정 가능
+- 별도의 어노테이션이나 keyword가 필요하면 주 생서자여도 constructor 키워드 필요
+
+**예제**
+```kotlin
+// val 또는 var 키워드가 있으면 인스턴스 프로퍼티 명시도 한꺼번에
+class User1(val name: String)
+
+// 키워드가 없으면 name은 오직 매개변수 역할만 
+class User2 (name: String) {
+    private val _name: String
+
+    init {
+        this._name = name
+    }
+}
+
+// 별도의 어노테이션이나 keyword가 필요하면 주 생서자여도 constructor 키워드 필요
+class PrivateUser private constructor(val name: String) {
+
+}
+```
+
+### 부생성자
+- 여러가지 방법으로 초기할 수 있게 지원하는 기능
+- `this`키워드를 통해 생성자를 호출 가능
+- `super`키워드를 통해 상위 클래스 생성자 호출 가능
+
+**this 를 이용한 부 생성자**
+```kotlin
+class SubUser(name: String, age: Int) {
+    private val _name: String
+    private val _age: Int
+    init {
+        println("주 생성자 호출")
+        this._name = name
+        this._age = age
+    }
+
+    constructor(name: String): this(name, 10)  {
+        println("부 생성자 호출")
+    }
+
+    constructor(age: Int): this("기본", age) {
+        println("부 생성자 호출")
+    }
+}
+```
+
+**상속**
+```kotlin
+open class SuperUser(val name: String) {
+    init {
+        println("Super User 주 생성자 호출")
+    }
+}
+
+class User3(name: String, age: Int): SuperUser(name) {
+    val _age: Int
+    init {
+        println("User 3 주 생성자 호출")
+        this._age = age
+    }
+
+    constructor(age: Int): this("고정", 10) {
+        println("User 3 부 생성자 호출")
+    }
+
+}
+```
+
+**super를 이용한 상위 부 생성자 접근**
+```kotlin
+open  class SuperUser2 {
+    constructor(name: String)
+    constructor(name: String, age: Int)
+}
+
+class User4: SuperUser2 {
+    constructor(name: String): super(name) {}
+    constructor(name: String, age: Int): super(name,age) {}
+}
+```

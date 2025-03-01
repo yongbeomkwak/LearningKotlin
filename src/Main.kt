@@ -40,6 +40,68 @@ fun eval2(e: Expr2): Int {
     }
 }
 
+class User1(val name: String)
+
+class User2 (name: String) {
+    private val _name: String
+
+    init {
+        this._name = name
+    }
+}
+
+class PrivateUser private constructor(val name: String) {
+
+}
+
+class SubUser(name: String, age: Int) {
+    private val _name: String
+    private val _age: Int
+    init {
+        println("주 생성자 호출")
+        this._name = name
+        this._age = age
+    }
+
+    constructor(name: String): this(name, 10)  {
+        println("부 생성자 호출")
+    }
+
+    constructor(age: Int): this("기본", age) {
+        println("부 생성자 호출")
+    }
+}
+
+open class SuperUser(val name: String) {
+    init {
+        println("Super User 주 생성자 호출")
+    }
+}
+
+class User3(name: String, age: Int): SuperUser(name) {
+    val _age: Int
+    init {
+        println("User 3 주 생성자 호출")
+        this._age = age
+    }
+
+    constructor(age: Int): this("고정", 10) {
+        println("User 3 부 생성자 호출")
+    }
+
+}
+
+open  class SuperUser2(name: String) {
+//    constructor(name: String)
+    constructor(name: String, age: Int): this(name)
+}
+
+class User4: SuperUser2 {
+    constructor(name: String): super(name) {}
+    constructor(name: String, age: Int): super(name,age) {}
+}
+
+
 
 fun main() {
     // ✅ NestedClass 인스턴스 생성 (외부 클래스 필요 없음)
@@ -62,5 +124,14 @@ fun main() {
     println(eval2(n2))
     println(eval2(s2))
 
+    val user1 = User1("헬로")
+    println(user1.name)
+
+    val user2 = User2("헬로2")
+    println("_name2") // 접근 불가
+
+    val subUser = SubUser("NN")
+
+    val user3 = User3(20)
 }
 
