@@ -47,20 +47,40 @@ setter가 필요하다면 반드시 `var`로 선언
 
 ---
 
-## Compnion Object
+## object
+object 키워드는 클래스를 정의하면서 동시에 인스턴스를 생성한다.
+
+- `객체 선언`은 클래스 선언과 동시에 단일 인스턴스를 생성
+- 즉 싱글톤에 쓰기 좋다.
+- 생성자 호출 없이 즉시 생성
+- 인터페이스 구현과 상속 가능
+- Anonymous Object(무명 객체)로 이용 (`싱글톤`이 아님)
+
+---
+## compnion object
 
 클래스 레벨의 메소드 또는 프로퍼티를 갖게 해주는 객체이다.
+
+- 동반 객체는 클래스 이름을 통해 이용한다.
+- java의 `static`과 유사
+- 인터페이스 구현과 상속 가능
+- 동반 객체는 자신을 둘러싼 클래스의 모든 private 멤버에 접근이 가능하다.
+- 확장이 가능하다. (`Companion` 키워드 또는 `동반 객체 이름`을 통해)
 
 ### 선언
 
 ```kotlin
-class AClass {
-    companion object { 
-        
-    }
-    
-    companion object 이름 {
-        
+class User private constructor(private val nickname: String){ // 주 생성자를 private으로 생성
+    companion object { // 동반 객체 선언
+        fun newSubscribingUser(email: String) = User(email.substringBefore('@'))
+        fun newFacebookUser(accountId: Int) = User("${accountId}")
+        fun createUser(): User {
+            return User("HH")
+        }
+
+        fun printUserName(user: User) {
+            println(user.nickname) // ✅ private 멤버에 접근 가능!
+        }
     }
 }
 ```
@@ -71,9 +91,37 @@ class AClass {
 클래스명.CO명.프로퍼티 명 또는 클래스명.프로퍼티 명
 ```
 
+### 인터페이스 구현 및 상속
+```kotlin
+interface JSONFactory<T> {
+    fun fromJSON(jsonText: String): T
+}
+
+class Person(val name: String) {
+    companion object : JSONFactory<Person> {
+        // 동반 객체가 인터페이스를 구현한다.
+        override fun fromJSON(jsonText: String): Person = /* TODO */
+    }
+}
+```
+### 확장 함수 정의
+```kotlin
+// 비즈니스 로직 모듈
+class Person(val firstName: String, val lastName: String) {
+    companion object {
+        // 비어있는 동반 객체 선언
+    }
+}
+
+// 클라이언트/서버 통신 모듈
+// 확장 함수 선언
+fun Person.Companion.fromJSON(json: String): Person {
+    /* TODO */
+}
+```
 ---
 
-### 상속 접근 제한자 final, open, abstract, override
+## 상속 접근 제한자 final, open, abstract, override
 
 |    키워드    |    override 가능 여부     |                   설명                    |
 |:---------:|:---------------------:|:---------------------------------------:|
@@ -286,5 +334,64 @@ open  class SuperUser2 {
 class User4: SuperUser2 {
     constructor(name: String): super(name) {}
     constructor(name: String, age: Int): super(name,age) {}
+}
+```
+---
+
+## 클래스 필수 정의 메서드
+
+### 1. toString()
+
+- 클래스의 인스턴스 문자열 표현을 정의
+- 주로 디버깅과 로깅 시 사용
+
+```kotlin
+    override fun toString(): String {
+        return "${name} ${age}"
+    }
+```
+
+### 2. equals()
+
+- 객체의 동등성을 담당함
+- `==` or `!=` 연산에 사용됨
+
+```kotlin
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is Temp) {
+            return false
+        }
+        return name == other.name && age == other.age
+    }
+```
+
+### 3. hashCode()
+- 두 객체의 해시 동등성 판단
+---
+
+## data class
+- 오직 데이터를 저장하는 역할만 수행
+- 자동으로 필수 메서드를 정의해 줌
+- 불변성을 위한 `copy` 메서드를 제공
+
+---
+## 클래스 위임 
+- 상속을 허용하지 않은 클래스에 새로운 동작을 추가할 때
+- `by` 키워드를 통해 클래스 위임 가능
+
+```kotlin
+class CountingSet<T>(
+    val innerSet: MutableCollection<T> = HashSet<T>()
+) : MutableCollection<T> by innerSet { // MutablleCollection의 구현을 innerSet 에게 위임한다. 
+    var objectsAdded = 0
+    override fun add(element: T): Boolean { // 위임하지 않고 새로운 구현을 제공
+        objectsAdded++
+        return innerSet.add(element)
+    }
+
+    override fun addAll(c: Collection<T>): Boolean { // 위임하지 않고 새로운 구현을 제공
+        objectsAdded += c.size
+        return innerSet.addAll(c)
+    }
 }
 ```

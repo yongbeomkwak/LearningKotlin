@@ -1,138 +1,96 @@
-class OuterClass1 {
-    var outerProperty: Int = 3
-    class NestedClass {
-        fun printOuter() {
-            println("바깥쪽에 대한 참조가 없음")
+
+class Temp(val name: String, val age: Int) {
+    override fun toString(): String {
+        return "${name} ${age}"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is Temp) {
+            return false
         }
+        return name == other.name && age == other.age
     }
-}
 
-class OuterClass2 {
-    var outerProperty: Int = 3
-    inner class InnerClass {
-        fun printOuter() {
-         println(this@OuterClass2.outerProperty)
-        }
-    }
-}
-
-interface Expr1
-class Num1: Expr1
-class Sum1: Expr1
-
-fun eval1(e: Expr1): Int {
-    return when(e) {
-        is Num1 ->  10
-        is Sum1 ->  20
-        else -> 0
-    }
-}
-
-sealed class Expr2 {
-    class Num2: Expr2()
-    class Sum2: Expr2()
-    class Kum2: Expr2()
-}
-
-fun eval2(e: Expr2): Int {
-    return when(e) {
-        is Expr2.Num2 ->  10
-        is Expr2.Sum2 ->  20
-        is Expr2.Kum2 -> 30
-    }
-}
-
-// 밖에서 바다올 매개변수 이름과 안에서 사용할 매개변수 이름이 같으면
-class User1(val name: String)
-//class User1(name: String) {
-//    val name: String
-//    init {
-//        this.name = name
+//    override fun hashCode(): Int {
+//        return name.hashCode() * 31 + age
 //    }
-//}
+}
 
-class User2 (name: String) {
-    private val _name: String
+data class Client(val name: String, val age: Int)
+
+class CountingSet<T>(
+    val innerSet: MutableCollection<T> = HashSet<T>()
+) : MutableCollection<T> by innerSet { // MutablleCollection의 구현을 innerSet 에게 위임한다.
+    var objectsAdded = 0
+    override fun add(element: T): Boolean { // 위임하지 않고 새로운 구현을 제공
+        objectsAdded++
+        return innerSet.add(element)
+    }
+
+    override fun addAll(c: Collection<T>): Boolean { // 위임하지 않고 새로운 구현을 제공
+        objectsAdded += c.size
+        return innerSet.addAll(c)
+    }
+}
+
+object TempObject {
+    val number: Int
 
     init {
-        this._name = name
+        number = 11
     }
 }
 
-class PrivateUser private constructor(val name: String) {
+class User private constructor(private val nickname: String){ // 주 생성자를 private으로 생성
+    companion object { // 동반 객체 선언
+        fun newSubscribingUser(email: String) = User(email.substringBefore('@'))
+        fun newFacebookUser(accountId: Int) = User("${accountId}")
+        fun createUser(): User {
+            return User("HH")
+        }
 
-}
-
-class SubUser(name: String, age: Int) {
-    private val _name: String
-    private val _age: Int
-    init {
-        println("주 생성자 호출")
-        this._name = name
-        this._age = age
-    }
-
-    constructor(name: String): this(name, 10)  {
-        println("부 생성자 호출")
-    }
-
-    constructor(age: Int): this("기본", age) {
-        println("부 생성자 호출")
+        fun printUserName(user: User) {
+            println(user.nickname) // ✅ private 멤버에 접근 가능!
+        }
     }
 }
 
-open class SuperUser(val name: String) {
-    init {
-        println("Super User 주 생성자 호출")
-    }
+interface ClickListener {
+    fun onClick()
 }
-
-class User3(name: String, age: Int): SuperUser(name) {
-    val _age: Int
-    init {
-        println("User 3 주 생성자 호출")
-        this._age = age
-    }
-
-    constructor(age: Int): this("고정", age) {
-        println("User 3 부 생성자 호출")
-    }
-
-}
-
-open  class SuperUser2(name: String) {
-//    constructor(name: String)
-    constructor(name: String, age: Int): this(name)
-}
-
-class User4: SuperUser2 {
-    constructor(name: String): super(name) {}
-    constructor(name: String, age: Int): super(name,age) {}
-}
-
 
 
 fun main() {
-//    println("=========================")
-//    val n1 = Num1()
-//    val s1 = Sum1()
-//    println(eval1(n1))
-//    println(eval1(s1))
-//
-//    val n2 = Expr2.Num2()
-//    val s2 = Expr2.Sum2()
-//    println("=========================")
-//    println(eval2(n2))
-//    println(eval2(s2))
-//
-//    val user1 = User1("헬로")
-//    println(user1.name)
-//
-//    val user2 = User2("헬로2")
-//    println("_name2") // 접근 불가
-//
-//    val subUser = SubUser("NN")
-//
-    val user3 = User3(20)
+    val t1 = Temp("a", 1)
+    val t2 = Temp("a", 1)
+    println(t1 == t2)
+
+    val set = hashSetOf(t1)
+    println(set.contains(t2))
+
+    val c1 = Client("aa", 10)
+    println(c1)
+
+    val copyC2 = c1.copy(age = 20)
+    println(copyC2)
+
+    val cset = CountingSet<Int>()
+    cset.addAll(listOf(1,1,2))
+    println("${cset.objectsAdded} objects were added ${cset.size} remain")
+
+    val subscribingUser = User.newSubscribingUser("bob@gmail.com")
+    val facebookUser = User.newFacebookUser(4)
+
+    val buttonClickListener = object : ClickListener {
+        override fun onClick() {
+            println("버튼이 클릭되었습니다!")
+        }
+    }
+
+    buttonClickListener.onClick()
+
+
+
 }
+
 
