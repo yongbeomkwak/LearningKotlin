@@ -344,13 +344,15 @@ fun withOut(): String {
 fun  with(): String {
   var numbers = mutableListOf<Int>()
 
-  with(numbers) {
+  val result = with(numbers) {
     for (letter in 1..10) {
       add(letter)
     }
     print(this)
-    return this.toString()
+    this.toString()
   }
+  
+  return result
 }
 ```
 
