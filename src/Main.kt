@@ -1,6 +1,31 @@
 import org.w3c.dom.css.Counter
 
 
-fun main() {
+fun String.a(): String? {
+    println("a")
+    return "aaa"
+}
 
+fun String.b(): String? {
+    println("b")
+    return null
+}
+
+fun String.c(): String? {
+    println("c")
+    return "c"
+}
+
+class Temp {
+    private  lateinit var temp: String
+
+    fun abc() {
+        println(::temp.isInitialized) // false
+        println(temp)  // ❌ lateinit property temp has not been initialized
+    }
+}
+
+fun main() {
+    var instance = Temp()
+    instance.abc()
 }
