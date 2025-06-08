@@ -26,6 +26,19 @@ class Temp {
 }
 
 fun main() {
-    var instance = Temp()
-    instance.abc()
+    var temp: String? = "12345"
+
+//    if (temp != null) {
+//        val firstResult =  temp.a()
+//
+//        if (firstResult != null) {
+//            val secondResult = firstResult.b()
+//
+//            if (secondResult != null) {
+//                val thirdResult = secondResult.c()
+//            }
+//        }
+//    }
+
+    temp?.a()?.b()?.c()
 }

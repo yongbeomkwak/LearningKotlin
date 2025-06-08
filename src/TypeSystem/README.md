@@ -21,7 +21,7 @@ fun strLen(s1 : String, s2 : String?) {...}
 
 ## 🆘 SafeCall
 ### ✅ 문법
-`.?` 통해 Null 검사와 호출을 동시에 진행, null을 만나면 줃단
+`?.` 통해 Null 검사와 호출을 동시에 진행, null을 만나면 줃단
 
 ```kotlin
 fun String.a(): String? {
