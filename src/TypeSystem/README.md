@@ -102,7 +102,7 @@ fun main() {
 
 ## 👌lateinit 변경자
 - Nullable 변수에 대해 불필요한 `Null 체크 하지 않게 만듬`
-- 간단히 정리하면 `컴파일아 나중에 꼭 할당할테니깐 얘는 나중에 쓸 때 Null 아니다`
+- 간단히 정리하면 `컴파일러야 나중에 꼭 할당할테니깐 얘는 나중에 쓸 때 Null 아니다`
 - 당연히 `var`만 사용 가능
 - `Primitive Type (Int, Float, Double, Long)` 사용 불가
 ```kotlin
