@@ -1,4 +1,5 @@
 import org.w3c.dom.css.Counter
+import java.util.Objects
 
 
 fun String.a(): String? {
@@ -28,11 +29,43 @@ class Temp {
         println(temp)  // ❌ lateinit property temp has not been initialized
     }
 }
+
+class DummyInt(a: Int) {
+    companion object {}
+}
+
+
+open class A {}
+
+class B: A() {}
+
+let keychain = Keychain()
+
 fun main() {
-    var a: Int 123
-    var c: String = "123"
 
-    var b: Boolean = true
+    class Keychain {
+        let shared = Keychain()
+    }
 
-    123.toLong()
+
+    class Network {
+
+        private  let keychain: Keychain
+
+        func abc() {
+            Keychain
+        }
+    }
+
+    class ViewMdeol {
+
+    }
+
+    class ViewModel {
+
+
+        fun save() {
+            keychain
+        }
+    }
 }
