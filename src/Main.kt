@@ -17,14 +17,22 @@ fun String.c(): String? {
 }
 
 class Temp {
-    private  lateinit var temp: String
+    private  lateinit var temp: String // 컴파일러야, 지금은 아무 값도 없지만, 나중에 사용할 때 무조건 값이 있으니깐, 얘는 널체크할 필요없어
+
+
 
     fun abc() {
-        println(::temp.isInitialized) // false
+        val prop = this::temp
+        prop
+
         println(temp)  // ❌ lateinit property temp has not been initialized
     }
 }
 fun main() {
-    lateinit 값을 나중에 초기화
-            var val
+    var a: Int 123
+    var c: String = "123"
+
+    var b: Boolean = true
+
+    123.toLong()
 }
