@@ -1,4 +1,5 @@
 import org.w3c.dom.css.Counter
+import java.util.LinkedList
 import java.util.Objects
 
 
@@ -39,33 +40,6 @@ open class A {}
 
 class B: A() {}
 
-let keychain = Keychain()
-
 fun main() {
 
-    class Keychain {
-        let shared = Keychain()
-    }
-
-
-    class Network {
-
-        private  let keychain: Keychain
-
-        func abc() {
-            Keychain
-        }
-    }
-
-    class ViewMdeol {
-
-    }
-
-    class ViewModel {
-
-
-        fun save() {
-            keychain
-        }
-    }
 }
