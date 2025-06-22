@@ -1,4 +1,5 @@
 import org.w3c.dom.css.Counter
+import java.util.HashMap
 import java.util.LinkedList
 import java.util.Objects
 
@@ -30,15 +31,6 @@ class Temp {
         println(temp)  // ❌ lateinit property temp has not been initialized
     }
 }
-
-class DummyInt(a: Int) {
-    companion object {}
-}
-
-
-open class A {}
-
-class B: A() {}
 
 fun main() {
 
