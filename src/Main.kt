@@ -3,35 +3,29 @@ import java.util.HashMap
 import java.util.LinkedList
 import java.util.Objects
 
+data class Point(var x: Int, var y: Int) {
+    operator fun get(index: Int): Int {
+        return when(index) {
+            0 -> x
+            1 -> y
+            else -> throw IndexOutOfBoundsException("Invalid ${index}")
+        }
+    }
 
-fun String.a(): String? {
-    println("a")
-    return "aaa"
-}
-
-fun String.b(): String? {
-    println("b")
-    return null
-}
-
-fun String.c(): String? {
-    println("c")
-    return "c"
-}
-
-class Temp {
-    private  lateinit var temp: String // 컴파일러야, 지금은 아무 값도 없지만, 나중에 사용할 때 무조건 값이 있으니깐, 얘는 널체크할 필요없어
-
-
-
-    fun abc() {
-        val prop = this::temp
-        prop
-
-        println(temp)  // ❌ lateinit property temp has not been initialized
+    operator fun set(index: Int, value: Int) {
+        return when(index) {
+            0 -> x = value
+            1 -> y = value
+            else -> throw IndexOutOfBoundsException("Invalid ${index}")
+        }
     }
 }
 
 fun main() {
+    var aPoint = Point(100, 200)
 
+    aPoint[0] = 200
+    aPoint[1] = 100
+
+    print("${aPoint[0]} ${aPoint[1]}") // 200, 100
 }
