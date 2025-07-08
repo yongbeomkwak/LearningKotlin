@@ -1,5 +1,7 @@
 # 연산자 오버로딩과 기타관계
 
+> [공식문서](https://kotlinlang.org/docs/operator-overloading.html#in-operator)
+
 ## 🔢 산술 연산자
 
 ###  이항 연산자
@@ -199,4 +201,85 @@ var aPoint = Point(100, 200)
 }
 ```
 
+### 📦 in 연산자
+> 포함 여부를 판단 하는 연산자
 
+| 연산자 기호 | 키워드         |
+|------------|----------------|
+| in         | contains     |
+
+```kotlin
+data class Point(var x: Int, var y: Int) {
+
+}
+data class Rectangle(val upperLeft: Point, val lowerRight: Point) {
+
+    operator fun contains(p: Point): Boolean {
+        return p.x in upperLeft.x until lowerRight.x &&
+                p.y in upperLeft.y until lowerRight.y
+    }
+}
+
+fun main() {
+    val rect = Rectangle(Point(10, 20), Point(50, 50))
+    println(Point(10, 30) in rect) // true
+    println(Point(10, 50) in rect) // false
+}
+```
+
+### 🔹 .. 연산자
+> 범위 생성 연산자
+
+| 연산자 기호 | 키워드     |
+|--------|---------|
+| ..     | rangeTo |
+
+```kotlin
+public class Int private constructor() {
+    public operator fun rangeTo(other: Int): IntRange   
+}
+```
+
+추가적으로 코틀린에서는 모든 `Comparable` 인터페이스를 채택하면 rangeTO 함수를 제공한다.
+
+### ♻️ iterator 연산자
+> 반복문 순회를 연산자
+
+```kotlin
+data class MyNumber(val value: Int) : Comparable<MyNumber> {
+    override fun compareTo(other: MyNumber): Int = value.compareTo(other.value)
+
+    operator fun rangeTo(other: MyNumber): MyNumberRange {
+        return MyNumberRange(this, other)
+    }
+}
+
+data class MyNumberRange(
+    private val start: MyNumber,
+    private val endInclusive: MyNumber
+) {
+    operator fun iterator(): Iterator<MyNumber> {
+        return  object: Iterator<MyNumber> {
+            private var current = start
+
+            override fun hasNext(): Boolean = current <= endInclusive
+
+            override fun next(): MyNumber {
+                val temp = current
+                current = MyNumber(current.value+1)
+                return temp
+            }
+        }
+    }
+}
+
+fun main() {
+    val start = MyNumber(1)
+    val end = MyNumber(5)
+    val range = start..end
+
+    for (num in range) {
+        println(num.value)
+    }
+}
+```

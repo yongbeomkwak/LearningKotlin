@@ -2,30 +2,28 @@ import org.w3c.dom.css.Counter
 import java.util.HashMap
 import java.util.LinkedList
 import java.util.Objects
+import javax.print.attribute.standard.MediaSize.Other
 
-data class Point(var x: Int, var y: Int) {
-    operator fun get(index: Int): Int {
-        return when(index) {
-            0 -> x
-            1 -> y
-            else -> throw IndexOutOfBoundsException("Invalid ${index}")
-        }
+class Delegate{
+    operator fun getValue(...){
+        ...
+        // getter를 구현하는 로직을 담는다.
     }
 
-    operator fun set(index: Int, value: Int) {
-        return when(index) {
-            0 -> x = value
-            1 -> y = value
-            else -> throw IndexOutOfBoundsException("Invalid ${index}")
-        }
+    operator fun setValue(...){
+        ...
+        // setter를 구현하는 로직을 담는다.
+    }
+}
+
+data class A(val aa : Int = 10) {
+    operator fun plusAssign(o: A) {
+        this.aa += o.aa
     }
 }
 
 fun main() {
-    var aPoint = Point(100, 200)
-
-    aPoint[0] = 200
-    aPoint[1] = 100
-
-    print("${aPoint[0]} ${aPoint[1]}") // 200, 100
+    val a = A()
+    val b = A()
+    a += b
 }
