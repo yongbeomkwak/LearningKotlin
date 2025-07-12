@@ -283,3 +283,168 @@ fun main() {
     }
 }
 ```
+
+## ⚔ 구조 분해
+
+### 구조 분해 연산자
+> 멤버 변수들을 정해진 순서로 분해해서 할당을 도와주는 연산자
+
+`data class`로 만들었을 때는 재정의 하지 않아도, 선언 순서에 따라 자동으로 분해됨
+
+
+| 연산자 기호 | 키워드        |
+|--------|------------|
+| () =   | componentN |
+
+
+```kotlin
+data class Person(val name: String, val age: Int)
+class Country(val name: String, val population: Int) {
+
+    operator fun component1() = this.name
+    operator fun component2() = this.population
+}
+
+fun main() {
+    val p = Person("aa",10)
+    val (name, age) = p // data 클래스는 정의하지 않아도 자동 분해
+
+    println("$name $age")
+
+    var c = Country("Korea", 100) // operator componentN 명시 필요
+    val (name2, population) = c
+
+    println("$name2 $population")
+}
+```
+
+`for 구조문`과 함께 쓰일 때도, `구조 분해`는 강력한 기능을 제공한다.
+
+```kotlin
+data class Person(val name: String, val age: Int)
+
+fun main() {
+
+    val people: List<Person> = listOf(Person("a",1), Person("b",2))
+
+    for ((name, age) in people) {
+        println("$name $age")
+    }
+}
+```
+
+## 👨‍🔧위임 프로퍼티를 위한 접근자 로직 
+> 작업을 직접 수행하지 않고, 도우미 객체가 작업을 처리할 수 있게 하는 패턴을 위임(delegate)라고 함
+
+### 일반적인 위임 방식
+
+다음 연산자를 재정의해서 사용한다.
+
+| 연산자 기호 | 키워드      |
+|--------|----------|
+| =      | getValue |
+| =      | setValue |
+
+```kotlin
+class CustomDelegate {
+
+    // 위임 객체 호출
+    // thisRef: 호출 객체
+    // property: 위임된 프로퍼티 메타데이터
+    operator fun getValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>): String {
+        return "Hello, ${thisRef} '${property.name}' 에서 값을 가져왔어요!"
+    }
+
+    // 위임 객체 할당
+    // thisRef: 호출 객체
+    // property: 위임된 프로퍼티 메타데이터
+    // value: 새로 할당된 값
+    operator fun setValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>, value: String) {
+        println("변수 ${thisRef} '${property.name}' 에 '$value' 를 저장했어요.")
+    }
+}
+
+class Example {
+    var message: String by CustomDelegate()
+}
+
+fun main() {
+    val e = Example()
+    println(e.message) // Hello, Example@3d494fbf 'message' 에서 값을 가져왔어요!
+    e.message = "안녕" // 변수 Example@3d494fbf 'message' 에 '안녕' 를 저장했어요.
+}
+```
+
+```kotlin
+// ✅ 컴파일러 후
+
+class Example{
+    private val delegate = Delegate()
+    val p: String
+        set(value: Type) = delegate.setValue(..., value)
+    get() = delegate.getValue(...)
+}
+```
+
+프로퍼티에 위임자를 지정하면 `delegate`를 지정하면  해당 프로퍼티의 `get`과 `set`에
+
+자동으로 `delegate`의 `getValue`와 `getValue`를 자동으로 연결한다.
+
+다음 코드로 편의성을 확인할 수 있다.
+
+```kotlin
+// ❌ 위임을 사용하지 않은 코드
+class NoDelegateExample {
+    private var _message: String = "초기값"
+
+    var message: String
+        get() {
+            println("[NoDelegate] get message: $_message")
+            return _message
+        }
+        set(value) {
+            println("[NoDelegate] set message: $value")
+            _message = value
+        }
+}
+
+fun main() {
+    val ex = NoDelegateExample()
+    println(ex.message)
+    ex.message = "새 메시지"
+    println(ex.message)
+}
+```
+
+```kotlin
+// ✅ 위임을 사용한 코드
+
+import kotlin.reflect.KProperty
+
+class LogDelegate {
+    private var value: String = "초기값"
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
+        println("[Delegate] get ${property.name}: $value")
+        return value
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, newValue: String) {
+        println("[Delegate] set ${property.name}: $newValue")
+        value = newValue
+    }
+}
+
+class WithDelegateExample {
+    var message1: String by LogDelegate()
+    var message2: String by LogDelegate()
+}
+
+fun main() {
+    val e = Example()
+    println(e.message1)
+    e.message1 = "안녕"
+    e.message2 = "바이"
+    println(e.message2)
+}
+```
