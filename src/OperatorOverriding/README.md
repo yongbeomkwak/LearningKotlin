@@ -174,13 +174,14 @@ val bPoint = Point(200, 100)
 
 ```kotlin
 data class Point(var x: Int, var y: Int) {
-operator fun get(index: Int): Int {
-return when(index) {
-0 -> x
-1 -> y
-else -> throw IndexOutOfBoundsException("Invalid ${index}")
-}
-}
+    
+    operator fun get(index: Int): Int {
+        return when(index) {
+            0 -> x
+            1 -> y
+            else -> throw IndexOutOfBoundsException("Invalid ${index}")
+        }
+    }
 
     operator fun set(index: Int, value: Int) {
         return when(index) {
@@ -233,6 +234,7 @@ fun main() {
 | 연산자 기호 | 키워드     |
 |--------|---------|
 | ..     | rangeTo |
+| until | rangeUntil|
 
 ```kotlin
 public class Int private constructor() {
@@ -421,7 +423,7 @@ fun main() {
 
 import kotlin.reflect.KProperty
 
-class LogDelegate {
+class LogDelegate { 
     private var value: String = "초기값"
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
