@@ -3,72 +3,53 @@ import java.util.HashMap
 import java.util.LinkedList
 import java.util.Objects
 import javax.print.attribute.standard.MediaSize.Other
+import kotlin.reflect.KProperty
 
-//class CustomDelegate {
-//
-//    // thisRef: 호출 객체
-//    // property: 위임된 프로퍼티 메타데이터
-//    operator fun getValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>): String {
-//        return "Hello, ${thisRef} '${property.name}' 에서 값을 가져왔어요!"
-//    }
-//
-//    // thisRef: 호출 객체
-//    // property: 위임된 프로퍼티 메타데이터
-//    // value: 새로 할당된 값
-//    operator fun setValue(thisRef: Any?, property: kotlin.reflect.KProperty<*>, value: String) {
-//        println("변수 ${thisRef} '${property.name}' 에 '$value' 를 저장했어요.")
-//    }
-//}
-//
-//class Example {
-//    var message1: String by CustomDelegate()
-//    var message2: String by CustomDelegate()
-//}
-//
-//fun <T,V> abc (param1: T, param2: V): V {
-//    return param2
-//}
-//
-//class Processor<T> {
-//
-//    fun process(value: T) {
-//        print(value?.hashCode())
-//    }
-//}
-
-class TaxiDriver {
-
+// 🛒 결제 권한
+interface Payment {
+    fun processPayment(amount: Int)
 }
 
-interface Talkable {
-    fun talk() {}
+// 📦 물류 권한
+interface Logistics {
+    fun deliverItem(item: String)
 }
 
-class  Talker {}
-
-class Taxi {
-    val tv: TaxiDriver = TaxiDriver()
-    val tk: Talker = Talker()
-    val a: Int = 0
+// 💳 결제 담당자
+class PaymentManager(private val name: String) : Payment {
+    override fun processPayment(amount: Int) {
+        println("$name: 결제 $amount 원 완료")
+    }
 }
 
-class  Taxi2 {
-    val tv: TaxiDriver by Talkabl
+// 🚚 물류 담당자
+class LogisticsManager(private val name: String) : Logistics {
+    override fun deliverItem(item: String) {
+        println("$name: $item 배송 완료")
+    }
 }
 
+// 🏬 대형마트 - 결제와 물류를 각각 위임
+class Mart(payment: Payment, logistics: Logistics)
+    : Payment by payment, Logistics by logistics
+
+// 💼 Mart를 getValue로 생성해주는 대행자
+class MartDelegate(private val martName: String) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): Mart {
+        println("MartDelegate: $martName 마트를 준비합니다...")
+        return Mart(
+            PaymentManager("$martName 결제팀"),
+            LogisticsManager("$martName 물류팀")
+        )
+    }
+}
 
 fun main() {
-    val e = Example()
-    e.message1 = "12345" // setValue
-    e.message1 = "23455" // setValue
+    // MartDelegate가 실제 Mart를 생성해줌
+    val emart: Mart by MartDelegate("이마트")
 
-    println(e.message1)
-    e.message2 = "바이"
-    println(e.message2)
-
-
-    val name2: String = ""
-
-
-
+    println("=== 마트 업무 시작 ===")
+    emart.processPayment(50000)   // 결제팀에게 위임
+    emart.deliverItem("TV")       // 물류팀에게 위임
 }
+
