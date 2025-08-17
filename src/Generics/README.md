@@ -3,7 +3,7 @@
 ## ✅ 정의
 클래스, 인터페이스, 함수 등에 사용할 수 있는 
 
-`타입을 매개변수화(parameterize)`하는 
+`타입을 매개변수화(parameterize)`하는 문법
 
 쉽게 말해, 여러 타입에 대해 재사용 가능한 코드를 만들 수 있게 해준다.
 
@@ -105,3 +105,33 @@ val list2: List<Int> = listOf(1,2,3)
 fun <T> isA(value: Any) = value is T 
 // Error: Cannot check for instance of erased type: T
 ```
+
+여기서 약간의 마법을 부리면 타입 추정을 할 수 있다.
+
+준비물은 `inline`과 `reified` 키워드다.
+
+- inline
+  - 런타임에 호출한 부분에, 실행코드(바이트 코드)를 그대로 복사
+  - 람다 객체 생성 + 호출 스택 추가 오버헤드 ✖️ (성능 최적화)
+  - 코드 크기 증가, 추적이 어려울 수 있음
+
+- reified
+    - 제네릭 타입 정보를 런타임에도 보존
+    - 타입 정보를 inline 실행코드(바이트 코드)에 같이 넘겨줌
+
+```kotlin
+inline fun <reified T> isA(value : Any) = value is T
+  
+fun main(args : Array<String>){
+    println(isA<String>("abc")) 		//true
+    println(isA<String>(123))			//false
+}
+```
+
+## 🟰 변성
+
+### ✅ 정의
+
+기저 타입이 같고, 타입 인자가 다른 여러 타입이 서로 어떤 관계가 있는지 설명하는 개념
+
+
