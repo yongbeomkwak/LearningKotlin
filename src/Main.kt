@@ -44,12 +44,15 @@ class MartDelegate(private val martName: String) {
     }
 }
 
-fun main() {
-    // MartDelegate가 실제 Mart를 생성해줌
-    val emart: Mart by MartDelegate("이마트")
+interface  A {}
+interface  B {}
 
-    println("=== 마트 업무 시작 ===")
-    emart.processPayment(50000)   // 결제팀에게 위임
-    emart.deliverItem("TV")       // 물류팀에게 위임
+fun main() {
+
+    fun<T: Comparable<T>> roll(a: T, b: T): Boolean {
+        return a > b
+    }
+
+    print(roll(10,20))
 }
 
