@@ -134,4 +134,64 @@ fun main(args : Array<String>){
 
 기저 타입이 같고, 타입 인자가 다른 여러 타입이 서로 어떤 관계가 있는지 설명하는 개념
 
+### ⭐️ 클래스, 타입, 하위 타입
 
+- 클래스 이름과 타입은 항상 같지 않다. (대부분 같다)
+- 예외 상황은 뭐가 있을까?
+  - Nullable: String 클래스를 만들면, String? 타입이 생김
+  - Generic: 재네릭 클래스는 구체적인 타입 인자까지 정해져야, 타입이 된다. 즉, 무수히 많은 타입이 만들어진다.
+
+여기서 하위타입이라는 개념을 알아보자.
+
+리스코프 치환법칙
+  - A타입이 필요한 곳에, B타입으로 대체했을 때 아무 문제가 없다면 `B는 A의 하위타입이다.`
+
+제네릭에서는 특히, 무수히 많은 타입이 만들어지기때문에, 하위타입의 차이가 괴장히 중요하다.
+
+
+### 🤝 공변성: 하위 타입 관계 유지
+
+예를 들어, 어떤 재네릭 클래스가 `A`가 있고, `Cat`은 `Animal`의 하위타입일 때
+
+`A<Cat>` 역시, `A<Animal>`도 `하위 타입 관계`를 유지하고 싶을 때 우리는 `out`키워드를 사용한다.
+
+이 때, `A`는 공변적이라고 한다.
+
+조금 더, 자세히 해석하면 타입 파라미터 T는 타입 안전성을 보장하기위해, T타입 값을 생산 할 수 있지만, 소비는 할 수 없다는 뜻
+
+여기서 생산한다는 뜻은 `return 타입`에 쓰이는 것을 의미
+반대로, 함수의 `파라미터 타입`으로 쓰이면 타입을 소비(consume)하는 위치를 나타내는 `in` 키워드를 사용
+
+```kotlin
+open class Animal {
+    fun feed(){}
+}
+
+class Herd<out T: Animal> {
+    val size: Int get() { return 10 }
+
+    operator  fun get(i: Int): T {} // T타입이 리턴 타입에 사용 T타입 생산
+}
+
+fun feedAll(animals: Herd<Animal>) {
+    for (i in 0 until animals.size) {
+        animals[i].feed()
+    }
+}
+
+class  Cat: Animal() {
+    fun cleanLitter() {}
+}
+
+fun takeCareOfCats(cats: Herd<Cat>) {
+    for (i in 0 until cats.size) {
+        cats[i].cleanLitter()
+    }
+    
+    feedAll(cats)
+}
+```
+
+### 🪞반공병선: 뒤집힌 하위 타입 관계
+
+반공병성은 하ㅇ
